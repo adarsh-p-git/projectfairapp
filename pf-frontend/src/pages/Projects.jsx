@@ -27,7 +27,7 @@ function Projects() {
   console.log(allProjects)
   useEffect(() => {
     getAllProjects()
-  })
+  },[searchKey])
   return (
 
 

@@ -6,13 +6,16 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import './bootstrap.min.css'
+import ContextShare from './components/context/ContextShare';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-   <BrowserRouter>
+  <ContextShare>
+  <BrowserRouter>
    <App />
    </BrowserRouter>
+  </ContextShare>
   </React.StrictMode>
 );
 
