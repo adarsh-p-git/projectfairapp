@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import AddProjects from './AddProjects'
 import { userProjectAPI } from '../services/allAPI'
+import {addProjectResponseContext} from './context/ContextShare'
+import { Alert } from 'react-bootstrap'
+
+
 
 function MyProjects() {
   const [userProjects,setUserProjects]=useState([])
-  
+  const {addProjectResponse,setAddProjectResponse}=useContext(addProjectResponseContext)
   const getUserProjects=async()=>
 
   {
@@ -30,7 +34,7 @@ function MyProjects() {
   }
   useEffect(()=>{
     getUserProjects()
-  },[])
+  },[addProjectResponse])
   return (
     <div className='card shadow p-3 mt-3'>
       <div className="d-flex">
@@ -39,6 +43,10 @@ function MyProjects() {
           <AddProjects/>
         </div>
       </div>
+      {
+      addProjectResponse.title?<Alert className='bg-success' dismissible><span className='text-danger fw-bolder'> 
+      {addProjectResponse.title} Project added successfully</span></Alert>:null
+     }
     <div className="mt-4">
       {/* collection of projects */}
       {userProjects?.length>0?userProjects.map(project=>
