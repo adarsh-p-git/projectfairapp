@@ -6,7 +6,7 @@ const jwtMiddleware=async(req,res,next)=>{
      const token=req.headers['authorization'].split(" ")[1]
     //  console.log(token)
      try{
-        const jwtResponse = jwt.verify(token,"secret123")
+        const jwtResponse = jwt.verify(token,"secret1234")
         console.log(jwtResponse)
         req.payload=jwtResponse.userId
         next()

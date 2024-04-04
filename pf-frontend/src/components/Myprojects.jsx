@@ -1,14 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react'
 import AddProjects from './AddProjects'
-import { userProjectAPI } from '../services/allAPI'
-import {addProjectResponseContext} from './context/ContextShare'
+import { deleteProjectApi, userProjectAPI } from '../services/allAPI'
+import {addProjectResponseContext, editProjectResponseContext} from './context/ContextShare'
 import { Alert } from 'react-bootstrap'
+import EditProject from './EditProject'
 
 
 
 function MyProjects() {
   const [userProjects,setUserProjects]=useState([])
   const {addProjectResponse,setAddProjectResponse}=useContext(addProjectResponseContext)
+  const {editProjectResponse,setEditProjectResponse}=useContext(editProjectResponseContext)
+
   const getUserProjects=async()=>
 
   {
@@ -34,7 +37,23 @@ function MyProjects() {
   }
   useEffect(()=>{
     getUserProjects()
-  },[addProjectResponse])
+  },[addProjectResponse,editProjectResponse])
+
+  const handleDelete = async (id) => {
+    const token = sessionStorage.getItem("token")
+    const reqHeader = {
+      "Content-Type":"application/json",
+      "Authorization":`Bearer ${token}`
+    }
+    const result = await deleteProjectApi(id,reqHeader)
+    if(result.status===200){
+      alert("Project deleted successfully");
+      getUserProjects();
+    }else
+    {
+      alert(result.response.data)
+    }
+  }
   return (
     <div className='card shadow p-3 mt-3'>
       <div className="d-flex">
@@ -54,9 +73,10 @@ function MyProjects() {
         <div className="border d-flex align-items-center rounded p-2">
         <h5>{project.title}</h5>
         <div className="icon ms-auto">
-          <button className="btn"><i class="fa-solid fa-pen-to-square"></i></button>
+          <EditProject project={project}/>
+         
           <a href={`${project.github}`}></a> <i class="fa-brands fa-github"></i>
-          <button className="btn"><i class="fa-solid fa-trash"></i></button>
+          <button className="btn" onClick={()=>handleDelete (project._id)}><i class="fa-solid fa-trash"></i></button>
         </div>
       </div>
       )):
